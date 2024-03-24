@@ -1,1 +1,1 @@
-Create database Projeto_lagarto
+CREATE DATABASE PROJETO_LAGARTO
