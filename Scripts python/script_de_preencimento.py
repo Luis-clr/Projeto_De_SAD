@@ -1,6 +1,5 @@
 import pandas as pd
 
-import re
 
 # Caminho para o arquivo CSV
 caminho_arquivo_csv = 'Base de dados//consulta_frota_veiculoss.csv'
@@ -74,7 +73,7 @@ contador = 0
 incrementador = 0
 with open(caminho_arquivo, 'w') as arquivo_sql:
     for instituicao in Instituicao_dados:
-        arquivo_sql.write(f"INSERT INTO TB_INSTITUICAO (Cod_instituicao, nome) VALUES ( '{contador}','{instituicao}');\n")
+        arquivo_sql.write(f"INSERT INTO TB_INSTITUICAO (nome) VALUES ('{instituicao}');\n")
         contador +=1
     for secretaria in secretaria_dados:
         arquivo_sql.write(f"INSERT INTO TB_SECRETARIA (COD_SECRETARIA, nome) VALUES ({contador},'{secretaria}');\n")
