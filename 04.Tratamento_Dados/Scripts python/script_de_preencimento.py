@@ -2,16 +2,33 @@ import pandas as pd
 
 
 # Caminho para o arquivos CSV
-caminho_arquivo_csv = 'Base de dados//consulta_frota_veiculoss.csv'
+caminho_arquivo_csv = '04.Tratamento_Dados//Base de dados//consulta_frota_veiculoss.csv'
 df = pd.read_csv(caminho_arquivo_csv)
 
-#contratos_arquivo = 'Base de dados//contratos_licitacoes.csv'
+contratos_arquivo = '04.Tratamento_Dados//Base de dados//contratos_licitacoes.csv'
 
-#df_contratos_csv = pd.read_csv(contratos_arquivo)
-#print(df_contratos_csv)
+df_contratos_csv = pd.read_csv(contratos_arquivo, sep=';')
 # Separar os dados da primeira coluna em diferentes colunas
 colunas = df.iloc[:, 0].str.split(';', expand=True)
 
+Datas_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # datas dos contratos 
+Instituicoes_contratos = df_contratos_csv.iloc[:, 1].str.split(';', expand=True) # instituicoes dos contratos
+Numero_contratos = df_contratos_csv.iloc[:, 2].str.split(';', expand=True) # numeros dos contratos 
+Modalidade_contratos = df_contratos_csv.iloc[:, 3].str.split(';', expand=True) # modalidades dos contratos
+Objeto_contratos = df_contratos_csv.iloc[:, 4].str.split(';', expand=True) # Objeto dos contratos
+Data_hora_contratos = df_contratos_csv.iloc[:, 5].str.split(';', expand=True) # data e hora dos contratos
+Realizacao_contratos = df_contratos_csv.iloc[:, 6].str.split(';', expand=True) # realizacoes contratos
+Valor_contratos = df_contratos_csv.iloc[:, 7].str.split(';', expand=True) # Valores dos contratos
+Situacao_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # Situacao dos contratos 
+aviso_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # avisos dos contratos
+anexos_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # anexos_contratos
+Vencedores_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # vencedores contaros dos contratos
+
+
+
+
+
+print(df_contratos_csv)
 
 # Extrair todos os dados da coluna 1
 Instituicao_dados = colunas[0]
@@ -32,10 +49,10 @@ Tipo_veiculo_dados = Tipo_veiculo.unique()
 Tipo_observacao = Tipo_observacao.unique()
 
 
-secretaria_codigos = "Base de dados//SECRETARIA.csv"
-caminho_arquivo = "Base de dados//INSERTS.txt"
-Tipos_obs_codigos = "Base de dados//Tipo_observacao.csv"
-caminho_instituicao = 'Base de dados//Instituicao.csv'
+secretaria_codigos = "04.Tratamento_Dados//Base de dados//SECRETARIA.csv"
+caminho_arquivo = "04.Tratamento_Dados//Base de dados//INSERTS.txt"
+Tipos_obs_codigos = "04.Tratamento_Dados//Base de dados//Tipo_observacao.csv"
+caminho_instituicao = '04.Tratamento_Dados//Base de dados//Instituicao.csv'
 
 df_SECRETARIA = pd.read_csv(secretaria_codigos)
 
@@ -72,7 +89,7 @@ with open(caminho_arquivo, 'w') as arquivo_sql:
 
 # Retirando valores none do txt de inserts
         
-caminho_arquivo_entrada = 'Base de dados//INSERTS.txt'
+caminho_arquivo_entrada = '04.Tratamento_Dados//Base de dados//INSERTS.txt'
 # Abrir o arquivo de entrada para leitura e escrita
 with open(caminho_arquivo_entrada, 'r+') as arquivo:
     # Ler todas as linhas do arquivo
