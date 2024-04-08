@@ -2,10 +2,10 @@ import pandas as pd
 
 
 # Caminho para o arquivos CSV
-caminho_arquivo_csv = '04.Tratamento_Dados//Base de dados//consulta_frota_veiculoss.csv'
+caminho_arquivo_csv = 'Base de dados//consulta_frota_veiculoss.csv'
 df = pd.read_csv(caminho_arquivo_csv)
 
-contratos_arquivo = '04.Tratamento_Dados//Base de dados//contratos_licitacoes.csv'
+contratos_arquivo = 'Base de dados//contratos_licitacoes.csv'
 
 df_contratos_csv = pd.read_csv(contratos_arquivo, sep=';')
 # Separar os dados da primeira coluna em diferentes colunas
@@ -26,9 +26,13 @@ Vencedores_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) #
 
 
 
+for i in range(len(Data_hora_contratos)):
+    if Datas_contratos.iloc[i, 0] == 'None':
+        Datas_contratos.iloc[i, 0] = '01/01/2023'
+        print("ENTROU")
 
+print(Realizacao_contratos)
 
-print(df_contratos_csv)
 
 # Extrair todos os dados da coluna 1
 Instituicao_dados = colunas[0]
@@ -49,10 +53,12 @@ Tipo_veiculo_dados = Tipo_veiculo.unique()
 Tipo_observacao = Tipo_observacao.unique()
 
 
-secretaria_codigos = "04.Tratamento_Dados//Base de dados//SECRETARIA.csv"
-caminho_arquivo = "04.Tratamento_Dados//Base de dados//INSERTS.txt"
-Tipos_obs_codigos = "04.Tratamento_Dados//Base de dados//Tipo_observacao.csv"
-caminho_instituicao = '04.Tratamento_Dados//Base de dados//Instituicao.csv'
+
+
+secretaria_codigos = "Base de dados//SECRETARIA.csv"
+caminho_arquivo = "Base de dados//INSERTS.txt"
+Tipos_obs_codigos = "Base de dados//Tipo_observacao.csv"
+caminho_instituicao = 'Base de dados//Instituicao.csv'
 
 df_SECRETARIA = pd.read_csv(secretaria_codigos)
 
@@ -70,7 +76,8 @@ mapeamento_instituicao = dict(zip(df_instituicao[1], df_instituicao[0]))
 
 
 incrementador = 0
-with open(caminho_arquivo, 'w') as arquivo_sql:
+pegador = 0
+with open(caminho_arquivo, 'w', encoding='utf-8') as arquivo_sql:
     for instituicao in Instituicao_dados:
         arquivo_sql.write(f"INSERT INTO TB_INSTITUICAO (nome) VALUES ('{instituicao}');\n")
     for secretaria in secretaria_dados:
@@ -85,11 +92,13 @@ with open(caminho_arquivo, 'w') as arquivo_sql:
         intituicao_cod = mapeamento_instituicao.get(colunas[0][incrementador])
         arquivo_sql.write(f"INSERT INTO TB_VEICULO (PLACA, MARCA, MODELO, ANO_FABRICACAO, ANO_MODELO, COR, COD_TIPO_VEICULO, COD_SECRETARIA, COD_TIPO_OBSERVACAO, COD_INSTITUICAO) \n VALUES ( '{Placa[incrementador]}', '{marca_modelo[incrementador]}','{marca_modelo[incrementador]}', '01/01/{Ano_fabricao[incrementador]}', '01/01/{Ano_modelo[incrementador]}', '{Cor[incrementador]}', 1, {codigo}, {obs_codigo}, {intituicao_cod});\n")
         incrementador += 1
-
+    for contrato in Datas_contratos.iterrows():
+        arquivo_sql.write(f"INSERT INTO TB_CONTRATO (DATA_CONTRATO,NUMERO,OBJETIVO_CONTRATO,DATA_REALIZACAO,VALOR,SITUACAO,AVISO,VENCEDORES,COD_INSTITUICAO,COD_MODALIDADE) \n VALUES ('{Datas_contratos.iloc[pegador, 0]}','{Numero_contratos.iloc[pegador,0]}', '{Objeto_contratos.iloc[pegador,0]}','{Data_hora_contratos.iloc[pegador,0]}', 100000, '{Valor_contratos.iloc[pegador,0]}' ,'Sem aviso', 'Sem vencedor',1,1)\n")
+        pegador += 1
 
 # Retirando valores none do txt de inserts
         
-caminho_arquivo_entrada = '04.Tratamento_Dados//Base de dados//INSERTS.txt'
+caminho_arquivo_entrada = 'Base de dados//INSERTS.txt'
 # Abrir o arquivo de entrada para leitura e escrita
 with open(caminho_arquivo_entrada, 'r+') as arquivo:
     # Ler todas as linhas do arquivo
