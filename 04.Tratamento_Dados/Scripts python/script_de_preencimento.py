@@ -31,8 +31,9 @@ for i in range(len(Data_hora_contratos)):
         Datas_contratos.iloc[i, 0] = '01/01/2023'
         print("ENTROU")
 
-print(Realizacao_contratos)
 
+
+dados_modalidade = Modalidade_contratos[0].unique()
 
 # Extrair todos os dados da coluna 1
 Instituicao_dados = colunas[0]
@@ -59,6 +60,8 @@ secretaria_codigos = "Base de dados//SECRETARIA.csv"
 caminho_arquivo = "Base de dados//INSERTS.txt"
 Tipos_obs_codigos = "Base de dados//Tipo_observacao.csv"
 caminho_instituicao = 'Base de dados//Instituicao.csv'
+caminho_modalidade = 'Base de dados//modalidade.csv'
+
 
 df_SECRETARIA = pd.read_csv(secretaria_codigos)
 
@@ -67,12 +70,17 @@ df_SECRETARIA = df_SECRETARIA.iloc[:, 0].str.split(';', expand=True)
 df_obs_tipo = pd.read_csv(Tipos_obs_codigos)
 df_obs_tipo = df_obs_tipo.iloc[:, 0].str.split(';', expand=True)
 
+df_modalidade = pd.read_csv(caminho_modalidade)
+df_modalidade = df_modalidade.iloc[:, 0].str.split(';', expand=True)
+
 df_instituicao = pd.read_csv(caminho_instituicao)
 df_instituicao = df_instituicao.iloc[:, 0].str.split(';', expand=True)
 
 mapeamento = dict(zip(df_SECRETARIA[1], df_SECRETARIA[0]))
 mapeamento_obs = dict(zip(df_obs_tipo[1], df_obs_tipo[0]))
 mapeamento_instituicao = dict(zip(df_instituicao[1], df_instituicao[0]))
+
+mapeamento_cod_modalidade = dict(zip(df_modalidade[1],df_modalidade[0]))
 
 
 incrementador = 0
@@ -92,15 +100,22 @@ with open(caminho_arquivo, 'w', encoding='utf-8') as arquivo_sql:
         intituicao_cod = mapeamento_instituicao.get(colunas[0][incrementador])
         arquivo_sql.write(f"INSERT INTO TB_VEICULO (PLACA, MARCA, MODELO, ANO_FABRICACAO, ANO_MODELO, COR, COD_TIPO_VEICULO, COD_SECRETARIA, COD_TIPO_OBSERVACAO, COD_INSTITUICAO) \n VALUES ( '{Placa[incrementador]}', '{marca_modelo[incrementador]}','{marca_modelo[incrementador]}', '01/01/{Ano_fabricao[incrementador]}', '01/01/{Ano_modelo[incrementador]}', '{Cor[incrementador]}', 1, {codigo}, {obs_codigo}, {intituicao_cod});\n")
         incrementador += 1
+    for modalidade in dados_modalidade:
+        arquivo_sql.write(f"INSERT INTO TB_MODALIDADE (TIPO) VALUES ('{modalidade}'); \n")
+        print(modalidade)
     for contrato in Datas_contratos.iterrows():
-        arquivo_sql.write(f"INSERT INTO TB_CONTRATO (DATA_CONTRATO,NUMERO,OBJETIVO_CONTRATO,DATA_REALIZACAO,VALOR,SITUACAO,AVISO,VENCEDORES,COD_INSTITUICAO,COD_MODALIDADE) \n VALUES ('{Datas_contratos.iloc[pegador, 0]}','{Numero_contratos.iloc[pegador,0]}', '{Objeto_contratos.iloc[pegador,0]}','{Data_hora_contratos.iloc[pegador,0]}', 100000, '{Valor_contratos.iloc[pegador,0]}' ,'Sem aviso', 'Sem vencedor',1,1)\n")
+       
+        cod_mod = mapeamento_cod_modalidade.get(Modalidade_contratos.iloc[pegador, 0])
+        arquivo_sql.write(f"INSERT INTO TB_CONTRATO (DATA_CONTRATO,NUMERO,OBJETIVO_CONTRATO,DATA_REALIZACAO,VALOR,SITUACAO,AVISO,VENCEDORES,COD_INSTITUICAO,COD_MODALIDADE) \n VALUES ('{Datas_contratos.iloc[pegador, 0]}','{Numero_contratos.iloc[pegador,0]}', '{Objeto_contratos.iloc[pegador,0]}','{Data_hora_contratos.iloc[pegador,0]}', 100000, '{Valor_contratos.iloc[pegador,0]}' ,'Sem aviso', 'Sem vencedor',1,{cod_mod})\n")
         pegador += 1
 
 # Retirando valores none do txt de inserts
         
 caminho_arquivo_entrada = 'Base de dados//INSERTS.txt'
+df_contratos_csv = pd.read_csv(contratos_arquivo, sep=';', encoding='utf-8')
+
 # Abrir o arquivo de entrada para leitura e escrita
-with open(caminho_arquivo_entrada, 'r+') as arquivo:
+with open(caminho_arquivo_entrada, 'r+', encoding='utf-8') as arquivo:
     # Ler todas as linhas do arquivo
     linhas = arquivo.readlines()
     # Voltar ao início do arquivo para sobrescrevê-lo
