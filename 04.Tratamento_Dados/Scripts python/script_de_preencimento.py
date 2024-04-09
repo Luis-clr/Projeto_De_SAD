@@ -16,13 +16,9 @@ Instituicoes_contratos = df_contratos_csv.iloc[:, 1].str.split(';', expand=True)
 Numero_contratos = df_contratos_csv.iloc[:, 2].str.split(';', expand=True) # numeros dos contratos 
 Modalidade_contratos = df_contratos_csv.iloc[:, 3].str.split(';', expand=True) # modalidades dos contratos
 Objeto_contratos = df_contratos_csv.iloc[:, 4].str.split(';', expand=True) # Objeto dos contratos
-Data_hora_contratos = df_contratos_csv.iloc[:, 5].str.split(';', expand=True) # data e hora dos contratos
-Realizacao_contratos = df_contratos_csv.iloc[:, 6].str.split(';', expand=True) # realizacoes contratos
-Valor_contratos = df_contratos_csv.iloc[:, 7].str.split(';', expand=True) # Valores dos contratos
-Situacao_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # Situacao dos contratos 
-aviso_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # avisos dos contratos
-anexos_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # anexos_contratos
-Vencedores_contratos = df_contratos_csv.iloc[:, 0].str.split(';', expand=True) # vencedores contaros dos contratos
+Data_hora_realizacao_contratos = df_contratos_csv.iloc[:, 5].str.split(';', expand=True) # data e hora dos contratos
+Valor_referencia_contratos = df_contratos_csv.iloc[:, 6].str.split(';', expand=True) # realizacoes contratos
+Situacao_contratos = df_contratos_csv.iloc[:, 7].str.split(';', expand=True) # Valores dos contratos
 
 
 
@@ -47,6 +43,9 @@ Ano_fabricao = Ano_fabricao.str.replace('.', '')
 Ano_modelo = colunas[6]
 Ano_modelo = Ano_modelo.str.replace('.', '')
 Cor = colunas[7]
+
+
+
 
 Instituicao_dados = Instituicao_dados.unique()
 secretaria_dados = secretaria_dados.unique()
